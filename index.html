@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="VidMuse: A Simple Video-to-Music Generation Framework with Long-Short-Term Modeling">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>VidMuse: A Simple Video-to-Music Generation Framework with Long-Short-Term Modeling</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <!-- <link rel="stylesheet" href="./static/css/bulma-carousel.min.css"> -->
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <style>
+    .tabs {
+      display: flex;
+      /* justify-content: center; */
+      /* border-bottom: 2px solid #ddd; */
+      border-top: 2px solid #ddd;
+      float: left;
+    }
+
+    .tab {
+      padding: 10px 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      float: left;
+      /* width:200px; */
+      width: 560px;
+      /* margin: 0 30px 0 0; */
+    }
+
+    .tab:hover {
+      background-color: #f0f0f0;
+    }
+
+    .tab.active {
+      border-top: 2px solid #007bff;
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    .demo-video-container {
+      display: none;
+      /* padding: 20px; */
+    }
+
+    .demo-video-container.active {
+      display: block;
+    }
+
+    iframe {
+      width: 100%;
+      /* border-radius: 8px; */
+    }
+
+    .grid-video-container {
+      display: grid;
+      grid-template-columns: repeat(5, 225px);
+      gap: 2px;
+      /* 调整间距 */
+      /* width: 80%; */
+      /* max-width: 1080px; */
+    }
+
+    .video-item {
+      text-align: center;
+    }
+
+    .video-title {
+      margin-bottom: 5px;
+      font-weight: bolder;
+    }
+
+    .divider {
+      grid-column: span 5;
+      border-bottom: 2px solid #ccc;
+      margin: 10px 0;
+    }
+
+    .collapsible {
+      background-color: #f1f1f1;
+      cursor: pointer;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      text-align: center;
+      outline: none;
+      font-size: 15px;
+      width: 1120px;
+    }
+    .collapsible.active {
+      background-color: #ccc;
+    }
+
+    .collapsible:hover {
+      background-color: #ccc;
+    }
+
+    .collapsible-content {
+      padding: 6px 18px;
+      display: none;
+      overflow: hidden;
+      border: 4px dotted #ccc;
+      border-top: none;
+      /* background-color: #f9f9f9; */
+      /* background-color: #dad7d7; */
+    }
+  </style>
+
+</head>
+
+<body>
+  <!-- <section class="hero"> -->
+  <section class="section">
+    <!-- <div class="hero-body"> -->
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">VidMuse: A Simple Video-to-Music Generation Framework with
+              Long-Short-Term Modeling</h1>
+
+        </div>
+      </div>
+    </div>
+  <!-- </section> -->
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              In this work, we systematically study music generation conditioned solely on the video.
+              First, we present a large-scale dataset comprising 190K video-music pairs, including various genres such
+              as movie trailers, advertisements, and documentaries.
+              Furthermore, we propose VidMuse, a simple framework for generating music aligned with video inputs.
+              VidMuse stands out by producing high-fidelity music that is both acoustically and semantically aligned
+              with the video. By incorporating local and global visual cues, VidMuse enables the creation of musically
+              coherent audio tracks that consistently match the video content through Long-Short-Term modeling. Through
+              extensive experiments, VidMuse outperforms existing models in terms of audio quality, diversity, and
+              audio-visual alignment.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+
+      <!-- Paper video. -->
+
+      
+      <!--/ Paper video. -->
+    </div>
+
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- <div class="columns"> -->
+      <!-- <div class="column is-full-width"> -->
+<div class="columns is-centered has-text-centered">
+          <div class="column is-full-width">
+            <h2 class="title is-3">Video-to-Music Generation</h2>
+            <!-- <h2 class="title is-4">Comparisions with SoTA</h2> -->
+            <!-- <div class="columns is-centered has-text-centered">
+              <div class="column is-full-width"> -->
+            <button class="collapsible">
+              <h2 class="title is-4"> Comparisions with SoTA <br>
+                <span style="color: #f11111; font-size: 20px;">Click here to see details</span>
+              </h2>
+            </button>
+            <div class="collapsible-content">
+              <div class="video-container">
+                <div class="grid-video-container">
+                  <!-- First row -->
+                  <div class="video-item">
+                    <div class="video-title">Ours</div>
+                    <video src="static/videos/ours/gzUa2lcws0A.mp4" poster="static/posters/comparison/gzUa2lcws0A.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <div class="video-title">Caption2Musc</div>
+                    <video src="static/videos/caption2music/gzUa2lcws0A.mp4" poster="static/posters/comparison/gzUa2lcws0A.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <div class="video-title">CMT</div>
+                    <video src="static/videos/cmt/gzUa2lcws0A.mp4" poster="static/posters/comparison/gzUa2lcws0A.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <div class="video-title">M^2UGen</div>
+                    <video src="static/videos/m2ugen/gzUa2lcws0A.mp4" poster="static/posters/comparison/gzUa2lcws0A.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <div class="video-title">Video2Music</div>
+                    <video src="static/videos/video2music/gzUa2lcws0A.mp4" poster="static/posters/comparison/gzUa2lcws0A.png" controls=""></video>
+                  </div>
+                  <div class="divider"></div>
+                  <!-- Second row -->
+                  <div class="video-item">
+                    <video src="static/videos/ours/Z27q8P76LfI.mp4" poster="static/posters/comparison/Z27q8P76LfI.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/caption2music/Z27q8P76LfI.mp4" poster="static/posters/comparison/Z27q8P76LfI.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/cmt/Z27q8P76LfI.mp4" poster="static/posters/comparison/Z27q8P76LfI.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/m2ugen/Z27q8P76LfI.mp4" poster="static/posters/comparison/Z27q8P76LfI.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/video2music/Z27q8P76LfI.mp4" poster="static/posters/comparison/Z27q8P76LfI.png" controls=""></video>
+                  </div>
+                  <div class="divider"></div>
+                  <!-- Third row -->
+                  <div class="video-item">
+                    <video src="static/videos/ours/35npVaFGHMY.mp4" poster="static/posters/comparison/35npVaFGHMY.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/caption2music/35npVaFGHMY.mp4" poster="static/posters/comparison/35npVaFGHMY.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/cmt/35npVaFGHMY.mp4" poster="static/posters/comparison/35npVaFGHMY.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/m2ugen/35npVaFGHMY.mp4" poster="static/posters/comparison/35npVaFGHMY.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/video2music/35npVaFGHMY.mp4" poster="static/posters/comparison/35npVaFGHMY.png" controls=""></video>
+                  </div>
+                  <div class="divider"></div>
+                  <!-- Forth row -->
+                  <div class="video-item">
+                    <video src="static/videos/ours/du1zyS5f4QU.mp4" poster="static/posters/comparison/du1zyS5f4QU.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/caption2music/du1zyS5f4QU.mp4" poster="static/posters/comparison/du1zyS5f4QU.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/cmt/du1zyS5f4QU.mp4" poster="static/posters/comparison/du1zyS5f4QU.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/m2ugen/du1zyS5f4QU.mp4" poster="static/posters/comparison/du1zyS5f4QU.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/video2music/du1zyS5f4QU.mp4" poster="static/posters/comparison/du1zyS5f4QU.png" controls=""></video>
+                  </div>
+                  <div class="divider"></div>
+                  <!-- Fifth row -->
+                  <div class="video-item">
+                    <video src="static/videos/ours/nUJItb9Yfcw.mp4" poster="static/posters/comparison/nUJItb9Yfcw.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/caption2music/nUJItb9Yfcw.mp4" poster="static/posters/comparison/nUJItb9Yfcw.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/cmt/nUJItb9Yfcw.mp4" poster="static/posters/comparison/nUJItb9Yfcw.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/m2ugen/nUJItb9Yfcw.mp4" poster="static/posters/comparison/nUJItb9Yfcw.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/video2music/nUJItb9Yfcw.mp4" poster="static/posters/comparison/nUJItb9Yfcw.png" controls=""></video>
+                  </div>
+                  <div class="divider"></div>
+                  <!-- Sixth row -->
+                  <div class="video-item">
+                    <video src="static/videos/ours/gncn-nVKyC0.mp4" poster="static/posters/comparison/gncn-nVKyC0.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/caption2music/gncn-nVKyC0.mp4" poster="static/posters/comparison/gncn-nVKyC0.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/cmt/gncn-nVKyC0.mp4" poster="static/posters/comparison/gncn-nVKyC0.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/m2ugen/gncn-nVKyC0.mp4" poster="static/posters/comparison/gncn-nVKyC0.png" controls=""></video>
+                  </div>
+
+                  <div class="video-item">
+                    <video src="static/videos/video2music/gncn-nVKyC0.mp4" poster="static/posters/comparison/gncn-nVKyC0.png" controls=""></video>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          
+          <button class="collapsible">
+            <h2 class="title is-4"> More samples Generated by Our VidMuse <br> 
+              <span style="color: #f11111; font-size: 20px;">Click here to see details</span></h2>
+          </button>
+          <div class="collapsible-content">
+            <div class="video-container">
+              <div class="video-item">
+                <video src="static/videos/diversity/bg7iZOGQT3s.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/diversity/bg7iZOGQT3s_noaudio_32-48s.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/diversity/DAzVQic_3Kc.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/diversity/dzOqyG73KuE.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/diversity/f7VvrVBXtfc.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/diversity/MCJp8-MebGY_noaudio_0-16s.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/diversity/ngO6Mnmzc8A_0-30s.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/diversity/oMu-E3knVHU_noaudio_48-64s.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/diversity/Y_DxUmvLTzI.mp4" controls></video>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <button class="collapsible">
+            <h2 class="title is-4"> Music Generation for AI-generated Videos <br> 
+              <span style="color: #f11111; font-size: 20px;">Click here to see details</span></h2>
+          </button>
+          <div class="collapsible-content">
+            <div class="video-container">
+              <div class="video-item">
+                <video src="static/videos/ai_videos/dancing-kangaroo.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/ai_videos/film-1.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/ai_videos/first-2.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/ai_videos/first-7.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/ai_videos/monster-with-melting-candle.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/ai_videos/otter-on-surfboard.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/ai_videos/photoreal-train.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/ai_videos/sport-1.mp4" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/ai_videos/zen-garden-gnome.mp4" controls></video>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          
+          <button class="collapsible">
+            <h2 class="title is-4"> Music Generation for Long Videos <br> 
+              <span style="color: #f11111; font-size: 20px;">Click here to see details</span></h2>
+          </button>
+          <div class="collapsible-content">
+            <div class="video-container">
+              <div class="video-item">
+                <video src="static/videos/long_videos/Z3QKkl1WyM.mp4" poster="static/posters/long_videos/Z3QKkl1WyM.png" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/long_videos/acCQCGhbmaY.mp4" poster="static/posters/long_videos/acCQCGhbmaY.png" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/long_videos/aWzlQ2N6qqg.mp4" poster="static/posters/long_videos/aWzlQ2N6qqg.png" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/long_videos/pK2zYHWDZKo.mp4" poster="static/posters/long_videos/pK2zYHWDZKo.png" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/long_videos/uwmDH12MAA4.mp4" poster="static/posters/long_videos/uwmDH12MAA4.png" controls></video>
+              </div>
+              <div class="video-item">
+                <video src="static/videos/long_videos/ZTttCukWDgw.mp4" poster="static/posters/long_videos/ZTttCukWDgw.png" controls></video>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+  </section>
+
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- <div class="columns"> -->
+      <!-- <div class="column is-full-width"> -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">V2M Dataset</h2>
+          <h2 class="title is-4">The Pipeline of Dataset Construction</h2>
+          <!-- <br> -->
+          <div class="columns is-centered">
+            <img src="./static/images/data_pipeline.png" class="interpolation-image" alt="comparison_fewshot."
+              width="80%" heght="80%" />
+          </div>
+
+          <div class="column is-full-width">
+            <!-- <h2 class="title is-3">Data Statistics</h2> -->
+            <h2 class="title is-4">Data Statistics</h2>
+            <!-- <br> -->
+            <div class="columns is-centered">
+              <img src="./static/images/data_statistics.png" class="interpolation-image" alt="comparison_fewshot."
+                width="80%" heght="80%" />
+            </div>
+            <button class="collapsible">
+              <h2 class="title is-4"> Video-Music Samples in Our Dataset <br> 
+                <span style="color: #f11111; font-size: 20px;">Click here to see details</span></h2>
+            </button>
+            <div class="collapsible-content">
+              <div class="video-container">
+                <!-- 第一行 -->
+                <div class="video-item">
+                  <video src="static/videos/dataset/7xidOWnzSu4.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/WWEOCQGxSw.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/fsQSWu8gBUs.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/giXco2jaZ_4.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/ixDmLSMKryU.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/rl33gU2APIs.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/TcMBFSGVi1c.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/u4pfxViumkU.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/xqXG4NaoLSE.mp4" controls></video>
+                </div>
+                <div class="video-item">
+                  <video src="static/videos/dataset/Z1BCujX3pw8.mp4" controls></video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- <div class="columns"> -->
+      <!-- <div class="column is-full-width"> -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Method</h2>
+          <!-- <div class="columns is-centered"> -->
+          <img src="./static/images/pipeline.png" class="interpolation-image" alt="Method." height="80%" width="80%" />
+          <div class="content is-centered">
+            <p>
+              The overview of our proposed VidMuse.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <section class="section">
+        <div class="container is-max-desktop">
+          <!-- <div class="columns"> -->
+          <!-- <div class="column is-full-width"> -->
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-full-width">
+              <h2 class="title is-3">Experiments</h2>
+              <h2 class="title is-4">Main Results</h2>
+              <!-- <div class="columns is-centered"> -->
+              <img src="./static/images/main_results.png" class="interpolation-image" alt="main_results." height="80%"
+                width="80%" />
+            </div>
+
+          </div>
+
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-full-width">
+              <h2 class="title is-4">User Study</h2>
+
+              <div class="columns is-centered">
+                <img src="./static/images/user_study.png" class="interpolation-image" alt="gen_metrics." height="80%"
+                  width="80%" />
+              </div>
+            </div>
+          </div>
+
+          <div align="left">
+            <!-- <p align="left"> -->
+            The evaluation criteria are four-fold:
+            1) <b>Audio quality</b>: Refers to the sound quality of the audio track; 2) <b>Video-music
+              alignment</b>: Assesses how well the music matches the visual content, e.g., a scene showing a woman
+            crying should ideally be paired with music that sounds sad; 3) <b>Musicality</b>: Measures the
+            aesthetic appeal of music, independent of audio quality, e.g., a piece of music has high audio quality
+            but is out of tune has poor musicality; 4) <b>Overall assessment</b>: A comprehensive evaluation that
+            considers all aspects of the music.
+            <!-- </p> -->
+          </div>
+
+        </div>
+    </div>
+
+    </div>
+  </section>
+
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const videoContainers = document.querySelectorAll('.demo-video-container');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('mouseover', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        videoContainers.forEach(vc => vc.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+      });
+    });
+  </script>
+
+  <script>
+    var coll = document.getElementsByClassName("collapsible");
+    for (var i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+  </script>
+
+</body>
+
+
+</html>
